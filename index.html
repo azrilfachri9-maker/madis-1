@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Perkuliahan: Argumentasi dan Pembuktian Validitas dengan Tabel Kebenaran</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --primary-accent: #2563eb;
+            --secondary-accent: #38bdf8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --valid-bg: #dcfce7;
+            --valid-text: #166534;
+            --invalid-bg: #fee2e2;
+            --invalid-text: #991b1b;
+            --highlight-row: #fef08a;
+            --highlight-invalid-row: #fca5a5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.7;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            padding: 30px 15px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 45px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            border: 1px solid var(--border-color);
+        }
+
+        header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 25px;
+            margin-bottom: 30px;
+        }
+
+        .journal-badge {
+            display: inline-block;
+            background: #eff6ff;
+            color: var(--primary-accent);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background-color: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 35px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: 700;
+            border-left: 4px solid var(--primary-accent);
+            padding-left: 12px;
+            margin-bottom: 18px;
+            margin-top: 10px;
+        }
+
+        h3 {
+            color: var(--primary-accent);
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+        }
+
+        p, li {
+            font-size: 15px;
+            color: #334155;
+            margin-bottom: 12px;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-box {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 18px 22px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 15px 0 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table.truth-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        table.truth-table th, table.truth-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+        }
+
+        table.truth-table th {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        table.truth-table tr.critical-valid {
+            background-color: var(--highlight-row);
+            font-weight: 600;
+        }
+
+        table.truth-table tr.critical-invalid {
+            background-color: var(--highlight-invalid-row);
+            color: #7f1d1d;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-valid {
+            background-color: var(--valid-bg);
+            color: var(--valid-text);
+        }
+
+        .badge-invalid {
+            background-color: var(--invalid-bg);
+            color: var(--invalid-text);
+        }
+
+        .callout {
+            padding: 18px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 14px;
+            border-left: 4px solid;
+        }
+
+        .callout-valid {
+            background-color: #f0fdf4;
+            border-color: #22c55e;
+            color: #14532d;
+        }
+
+        .callout-invalid {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+            color: #7f1d1d;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <span class="journal-badge">Jurnal Perkuliahan</span>
+        <h1>Argumentasi & Pembuktian Validitas Menggunakan Tabel Kebenaran</h1>
+        <p class="subtitle">Dokumentasi Komprehensif Logika Matematika Diskrit</p>
+    </header>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <span class="info-label">Mata Kuliah</span>
+            <span class="info-value">Matematika Diskrit</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Materi Utama</span>
+            <span class="info-value">Logika & Argumentasi</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Metode Pengujian</span>
+            <span class="info-value">Tabel Kebenaran (Baris Kritis)</span>
+        </div>
+    </div>
+
+    <section>
+        <h2>1. Pendahuluan & Definisi Dasar</h2>
+        <p>
+            Dalam Matematika Diskrit, analisis argumen merupakan komponen inti logika proposisional. Kemampuan membedakan argumen yang sahih (valid) dan tidak sahih (invalid) sangat penting dalam penarikan kesimpulan ilmiah dan pemrograman komputer.
+        </p>
+        
+        <h3>Elemen-Elemen Argumen</h3>
+        <ul>
+            <li><strong>Argumen:</strong> Rangkaian pernyataan proposisi yang terdiri dari satu atau lebih premis dan diakhiri dengan satu konklusi.</li>
+            <li><strong>Premis:</strong> Pernyataan-pernyataan dasar (hipotesis atau asumsi) yang dianggap bernilai benar sebagai landasan penalaran.</li>
+            <li><strong>Konklusi:</strong> Pernyataan akhir yang diturunkan atau disimpulkan dari premis-premis yang ada.</li>
+        </ul>
+
+        <h3>Bentuk Simbolik Umum</h3>
+        <p>Secara matematis, sebuah argumen yang memiliki $n$ premis dituliskan dalam bentuk vertikal atau implikasi tunggal sebagai berikut:</p>
+
+        <div class="code-box">
+Premis 1 : P₁<br>
+Premis 2 : P₂<br>
+...<br>
+Premis n : Pₙ<br>
+------------------------<br>
+Konklusi : ∴ C<br><br>
+Notasi Implikasi Sintesis: (P₁ ∧ P₂ ∧ ... ∧ Pₙ) → C
+        </div>
+    </section>
+
+    <section>
+        <h2>2. Aturan & Langkah-Langkah Uji Validitas</h2>
+        <p>
+            Sebuah argumen dikatakan <strong>VALID</strong> jika dan hanya jika konklusi bernilai <strong>BENAR (True)</strong> pada seluruh kondisi di mana semua premisnya bernilai <strong>BENAR (True)</strong>.
+        </p>
+
+        <ol>
+            <li><strong>Identifikasi Variabel:</strong> Tentukan semua variabel proposisi ($p, q, r, \dots$) yang ada pada argumen.</li>
+            <li><strong>Konstruksi Baris Tabel:</strong> Buat tabel kebenaran lengkap sebanyak $2^n$ baris, di mana $n$ adalah jumlah variabel proposisi.</li>
+            <li><strong>Evaluasi Kolom:</strong> Buat kolom khusus untuk tiap premis ($P_1, P_2, \dots$) serta kolom untuk konklusi ($C$). Evaluasi nilai kebenarannya di tiap baris.</li>
+            <li><strong>Tentukan Baris Kritis:</strong> Cari dan tandai baris-baris di mana <u>seluruh premis sekaligus bernilai BENAR (True)</u>.</li>
+            <li><strong>Evaluasi Konklusi pada Baris Kritis:</strong>
+                <ul>
+                    <li>Jika pada <strong>semua</strong> baris kritis konklusinya bernilai <strong>T</strong>, maka argumen <span class="badge badge-valid">VALID</span>.</li>
+                    <li>Jika ada <strong>minimal satu</strong> baris kritis di mana konklusinya bernilai <strong>F</strong>, maka argumen <span class="badge badge-invalid">INVALID (FALASI)</span>.</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>3. Contoh Argumen Valid: Modus Ponens</h2>
+        <p>
+            <strong>Pernyataan Verbal:</strong><br>
+            <em>Premis 1:</em> Jika mahasiswa rajin belajar, maka mahasiswa akan lulus ujian.<br>
+            <em>Premis 2:</em> Mahasiswa rajin belajar.<br>
+            <em>Konklusi:</em> Oleh karena itu, mahasiswa lulus ujian.
+        </p>
+
+        <p><strong>Bentuk Simbolik:</strong></p>
+        <div class="code-box">
+Premis 1 ($P_1$) : p → q<br>
+Premis 2 ($P_2$) : p<br>
+-----------------------<br>
+Konklusi ($C$)  : ∴ q
+        </div>
+
+        <div class="table-responsive">
+            <table class="truth-table">
+                <thead>
+                    <tr>
+                        <th>Baris</th>
+                        <th>p</th>
+                        <th>q</th>
+                        <th>Premis 1 (p → q)</th>
+                        <th>Premis 2 (p)</th>
+                        <th>Konklusi (q)</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="critical-valid">
+                        <td>1</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td><strong>Baris Kritis (Premis Semua T) → Konklusi T</strong></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>Bukan Baris Kritis</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>Bukan Baris Kritis</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>Bukan Baris Kritis</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout callout-valid">
+            <strong>Analisis Hasil Modus Ponens:</strong><br>
+            Satu-satunya <strong>Baris Kritis</strong> adalah <strong>Baris 1</strong> (di mana $P_1$ = T dan $P_2$ = T). Pada baris kritis ini, nilai konklusi ($q$) adalah <strong>T (True)</strong>. Karena tidak ada baris kritis yang bernilai F, maka argumen Modus Ponens terbukti <span class="badge badge-valid">VALID</span>.
+        </div>
+    </section>
+
+    <section>
+        <h2>4. Contoh Argumen Tidak Valid: Falasi Penegasan Konsekuen</h2>
+        <p>
+            <strong>Pernyataan Verbal:</strong><br>
+            <em>Premis 1:</em> Jika hari hujan, maka jalanan basah.<br>
+            <em>Premis 2:</em> Jalanan basah.<br>
+            <em>Konklusi:</em> Oleh karena itu, hari hujan.
+        </p>
+
+        <p><strong>Bentuk Simbolik:</strong></p>
+        <div class="code-box">
+Premis 1 ($P_1$) : p → q<br>
+Premis 2 ($P_2$) : q<br>
+-----------------------<br>
+Konklusi ($C$)  : ∴ p
+        </div>
+
+        <div class="table-responsive">
+            <table class="truth-table">
+                <thead>
+                    <tr>
+                        <th>Baris</th>
+                        <th>p</th>
+                        <th>q</th>
+                        <th>Premis 1 (p → q)</th>
+                        <th>Premis 2 (q)</th>
+                        <th>Konklusi (p)</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="critical-valid">
+                        <td>1</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>Baris Kritis (Konklusi T)</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>Bukan Baris Kritis</td>
+                    </tr>
+                    <tr class="critical-invalid">
+                        <td>3</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td><strong>Baris Kritis (Konklusi F) → FALASI!</strong></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>T</td>
+                        <td>F</td>
+                        <td>F</td>
+                        <td>Bukan Baris Kritis</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="callout callout-invalid">
+            <strong>Analisis Hasil Falasi Penegasan Konsekuen:</strong><br>
+            Baris kritis terdapat pada <strong>Baris 1</strong> dan <strong>Baris 3</strong>. Pada <strong>Baris 3</strong>, semua premis bernilai <strong>T</strong>, tetapi nilai konklusinya ($p$) bernilai <strong>F (False)</strong>. Adanya setidaknya satu baris kritis bernilai F membuktikan bahwa argumen ini <span class="badge badge-invalid">INVALID</span>.
+        </div>
+    </section>
+
+    <section>
+        <h2>5. Kesimpulan</h2>
+        <ul>
+            <li>Validitas argumen tidak ditentukan oleh kebenaran riil di dunia nyata, melainkan oleh **konsistensi hubungan logis** antara premis dan konklusi.</li>
+            <li>Metode **Tabel Kebenaran** memberikan pengujian sistematis dengan cara mengisolasi **baris kritis**.</li>
+            <li>Memahami perbedaan antara bentuk valid seperti *Modus Ponens* dan bentuk tidak valid seperti *Falasi Penegasan Konsekuen* sangat penting untuk menghindari kesalahan logika (*logical fallacy*).</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>Jurnal Perkuliahan Matematika Diskrit &copy; 2026 - Format Mandiri HTML & CSS</p>
+    </footer>
+</div>
+
+</body>
+</html>
